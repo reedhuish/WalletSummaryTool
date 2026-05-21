@@ -9,16 +9,16 @@
   body { font-family: 'Segoe UI', Arial, sans-serif; background: #0d1117; color: #e6edf3; min-height: 100vh; padding: 24px; }
   .container { max-width: 1100px; margin: 0 auto; }
   header { text-align: center; margin-bottom: 32px; padding: 28px; background: linear-gradient(135deg, #161b22, #1f2937); border-radius: 12px; border: 1px solid #30363d; }
-  header h1 { font-size: 2rem; color: #58a6ff; margin-bottom: 6px; }
-  header p { color: #8b949e; font-size: 0.95rem; }
+  header h1 { font-size: 2.1rem; color: #58a6ff; margin-bottom: 6px; }
+  header p { color: #8b949e; font-size: 1rem; }
   .input-card { background: #161b22; border: 1px solid #30363d; border-radius: 12px; padding: 24px; margin-bottom: 24px; }
-  .input-card h2 { color: #58a6ff; font-size: 1.1rem; margin-bottom: 16px; }
+  .input-card h2 { color: #58a6ff; font-size: 1.15rem; margin-bottom: 16px; }
   .input-row { display: flex; gap: 12px; flex-wrap: wrap; margin-bottom: 12px; }
-  input[type="text"], input[type="password"] { flex: 1; min-width: 200px; padding: 10px 14px; background: #0d1117; border: 1px solid #30363d; border-radius: 8px; color: #e6edf3; font-size: 0.95rem; outline: none; transition: border-color 0.2s; }
+  input[type="text"], input[type="password"] { flex: 1; min-width: 200px; padding: 10px 14px; background: #0d1117; border: 1px solid #30363d; border-radius: 8px; color: #e6edf3; font-size: 1rem; outline: none; transition: border-color 0.2s; }
   input:focus { border-color: #58a6ff; }
   input::placeholder { color: #484f58; }
-  label { display: block; font-size: 0.8rem; color: #8b949e; margin-bottom: 4px; }
-  .btn { padding: 10px 24px; border: none; border-radius: 8px; font-size: 0.95rem; font-weight: 600; cursor: pointer; transition: opacity 0.2s, transform 0.1s; }
+  label { display: block; font-size: 0.85rem; color: #8b949e; margin-bottom: 4px; }
+  .btn { padding: 11px 26px; border: none; border-radius: 8px; font-size: 1rem; font-weight: 600; cursor: pointer; transition: opacity 0.2s, transform 0.1s; }
   .btn:hover { opacity: 0.85; transform: translateY(-1px); }
   .btn:active { transform: translateY(0); }
   .btn-primary { background: #238636; color: #fff; }
@@ -26,53 +26,65 @@
   .btn-orange { background: #d97706; color: #fff; }
   .btn-gray { background: #30363d; color: #e6edf3; }
   .btn:disabled { opacity: 0.4; cursor: not-allowed; }
-  .api-note { font-size: 0.78rem; color: #8b949e; margin-top: 8px; }
+  .api-note { font-size: 0.82rem; color: #8b949e; margin-top: 8px; }
   .api-note a { color: #58a6ff; }
-  .saved-note { font-size: 0.75rem; color: #2ea043; margin-top: 4px; }
-  #status-bar { display: none; background: #161b22; border: 1px solid #30363d; border-left: 4px solid #58a6ff; border-radius: 8px; padding: 14px 18px; margin-bottom: 20px; font-size: 0.9rem; color: #8b949e; }
-  #error-bar { display: none; background: #2d1b1b; border: 1px solid #f85149; border-left: 4px solid #f85149; border-radius: 8px; padding: 14px 18px; margin-bottom: 20px; color: #f85149; font-size: 0.9rem; }
+  .saved-note { font-size: 0.8rem; color: #2ea043; margin-top: 4px; }
+  #status-bar { display: none; background: #161b22; border: 1px solid #30363d; border-left: 4px solid #58a6ff; border-radius: 8px; padding: 14px 18px; margin-bottom: 20px; font-size: 0.95rem; color: #8b949e; }
+  #error-bar { display: none; background: #2d1b1b; border: 1px solid #f85149; border-left: 4px solid #f85149; border-radius: 8px; padding: 14px 18px; margin-bottom: 20px; color: #f85149; font-size: 0.95rem; }
   #results { display: none; }
   .summary-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 14px; margin-bottom: 24px; }
   .stat-card { background: #161b22; border: 1px solid #30363d; border-radius: 10px; padding: 18px; }
-  .stat-card .label { font-size: 0.75rem; color: #8b949e; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 6px; }
-  .stat-card .value { font-size: 1.25rem; font-weight: 700; color: #e6edf3; }
-  .stat-card .sub { font-size: 0.8rem; color: #8b949e; margin-top: 3px; }
+  .stat-card .label { font-size: 0.8rem; color: #8b949e; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 6px; }
+  .stat-card .value { font-size: 1.3rem; font-weight: 700; color: #e6edf3; }
+  .stat-card .sub { font-size: 0.85rem; color: #8b949e; margin-top: 3px; }
   .stat-card.green { border-left: 4px solid #2ea043; }
   .stat-card.red { border-left: 4px solid #f85149; }
   .stat-card.blue { border-left: 4px solid #58a6ff; }
   .section { background: #161b22; border: 1px solid #30363d; border-radius: 12px; padding: 20px; margin-bottom: 20px; }
-  .section h3 { font-size: 1rem; margin-bottom: 14px; color: #e6edf3; }
-  .section h3 span { font-size: 0.8rem; color: #8b949e; font-weight: normal; margin-left: 8px; }
-  table { width: 100%; border-collapse: collapse; font-size: 0.85rem; }
-  th { background: #21262d; padding: 10px 12px; text-align: left; font-weight: 600; color: #8b949e; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.04em; border-bottom: 1px solid #30363d; }
+  .section h3 { font-size: 1.05rem; margin-bottom: 14px; color: #e6edf3; }
+  .section h3 span { font-size: 0.85rem; color: #8b949e; font-weight: normal; margin-left: 8px; }
+  table { width: 100%; border-collapse: collapse; font-size: 0.9rem; }
+  th { background: #21262d; padding: 10px 12px; text-align: left; font-weight: 600; color: #8b949e; font-size: 0.78rem; text-transform: uppercase; letter-spacing: 0.04em; border-bottom: 1px solid #30363d; }
   td { padding: 9px 12px; border-bottom: 1px solid #21262d; vertical-align: middle; }
   tr:last-child td { border-bottom: none; }
   tr.in-row td { background: rgba(46,160,67,0.08); }
   tr.out-row td { background: rgba(248,81,73,0.08); }
   tr:hover td { background: rgba(255,255,255,0.04) !important; }
-  .badge { display: inline-block; padding: 2px 8px; border-radius: 12px; font-size: 0.72rem; font-weight: 700; }
+  .badge { display: inline-block; padding: 2px 8px; border-radius: 12px; font-size: 0.75rem; font-weight: 700; }
   .badge-in { background: rgba(46,160,67,0.2); color: #56d364; }
   .badge-out { background: rgba(248,81,73,0.2); color: #f85149; }
   .amount-in { color: #56d364; font-weight: 600; }
   .amount-out { color: #f85149; font-weight: 600; }
-  .addr { font-family: monospace; font-size: 0.78rem; color: #8b949e; }
+  .addr { font-family: monospace; font-size: 0.82rem; color: #8b949e; }
   .addr a { color: #58a6ff; text-decoration: none; }
   .addr a:hover { text-decoration: underline; }
   .export-bar { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 24px; }
   .spinner { display: inline-block; width: 14px; height: 14px; border: 2px solid #30363d; border-top-color: #58a6ff; border-radius: 50%; animation: spin 0.7s linear infinite; vertical-align: middle; margin-right: 6px; }
   @keyframes spin { to { transform: rotate(360deg); } }
-  .token-pill { display: inline-block; padding: 1px 7px; border-radius: 10px; font-size: 0.7rem; font-weight: 700; background: #21262d; color: #8b949e; margin-right: 3px; }
-  footer { text-align: center; margin-top: 32px; color: #484f58; font-size: 0.78rem; }
+  .token-pill { display: inline-block; padding: 1px 7px; border-radius: 10px; font-size: 0.73rem; font-weight: 700; background: #21262d; color: #8b949e; margin-right: 3px; }
+  footer { text-align: center; margin-top: 32px; color: #484f58; font-size: 0.82rem; }
   @media print {
-    body { background: #fff; color: #000; padding: 10px; }
+    body { background: #fff; color: #000; padding: 10px; font-size: 11pt; }
     .input-card, .export-bar, header p, footer { display: none; }
+    header h1 { color: #1f6feb; font-size: 1.6rem; }
     .stat-card { border: 1px solid #ccc; background: #fff; }
-    .stat-card .value, .stat-card .label, .stat-card .sub { color: #000; }
-    .section { border: 1px solid #ccc; background: #fff; }
-    .section h3 { color: #000; }
-    th { background: #1f6feb !important; color: #fff !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+    .stat-card .value { color: #000; font-size: 1.1rem; }
+    .stat-card .label { color: #555; font-size: 0.8rem; }
+    .stat-card .sub { color: #555; font-size: 0.85rem; }
+    .section { border: 1px solid #ccc; background: #fff; page-break-inside: avoid; }
+    .section h3 { color: #000; font-size: 1rem; }
+    table { font-size: 9pt; }
+    th { background: #1f6feb !important; color: #fff !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; font-size: 8pt; }
+    td { font-size: 9pt; padding: 6px 8px; }
     tr.in-row td { background: #c6efce !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
     tr.out-row td { background: #ffc7ce !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+    .amount-in { color: #006400 !important; }
+    .amount-out { color: #8b0000 !important; }
+    .addr a { color: #1f6feb !important; }
+    .badge-in { background: #c6efce !important; color: #006400 !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+    .badge-out { background: #ffc7ce !important; color: #8b0000 !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+    .token-pill { background: #eee !important; color: #333 !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+    .summary-grid { grid-template-columns: repeat(3, 1fr); }
   }
 </style>
 </head>
@@ -112,7 +124,7 @@
   <div id="results">
     <div class="export-bar">
       <button class="btn btn-blue" onclick="downloadCSV()">⬇ Download CSV (All Transactions)</button>
-      <button class="btn btn-orange" onclick="downloadDOCX()">⬇ Download Word Report (.rtf)</button>
+      <button class="btn btn-orange" onclick="downloadRTF()">⬇ Download Word Report (.rtf)</button>
       <button class="btn btn-gray" onclick="window.print()">🖨 Print / Save as PDF</button>
     </div>
     <div class="summary-grid" id="summaryGrid"></div>
@@ -124,14 +136,14 @@
       </table>
     </div>
     <div class="section">
-      <h3>🟢 Top 10 Incoming Wallets <span>(largest by value)</span></h3>
+      <h3>🟢 Top 20 Incoming Wallets <span>(largest by value)</span></h3>
       <table id="inTable">
         <thead><tr><th>#</th><th>Counterparty Address</th><th>Txs</th><th>Total ETH</th><th>Total USD</th><th>Tokens</th></tr></thead>
         <tbody></tbody>
       </table>
     </div>
     <div class="section">
-      <h3>🔴 Top 10 Outgoing Wallets <span>(largest by value)</span></h3>
+      <h3>🔴 Top 20 Outgoing Wallets <span>(largest by value)</span></h3>
       <table id="outTable">
         <thead><tr><th>#</th><th>Counterparty Address</th><th>Txs</th><th>Total ETH</th><th>Total USD</th><th>Tokens</th></tr></thead>
         <tbody></tbody>
@@ -293,7 +305,7 @@ async function runAudit() {
     document.getElementById("summaryGrid").innerHTML = `
       <div class="stat-card blue">
         <div class="label">Wallet Address</div>
-        <div class="value" style="font-size:0.72rem;font-family:monospace;word-break:break-all">${address}</div>
+        <div class="value" style="font-size:0.78rem;font-family:monospace;word-break:break-all">${address}</div>
         <div class="sub"><a href="https://etherscan.io/address/${address}" target="_blank" style="color:#58a6ff">View on Etherscan ↗</a></div>
       </div>
       <div class="stat-card blue">
@@ -337,7 +349,7 @@ async function runAudit() {
           <td class="${t.direction==="IN"?"amount-in":"amount-out"}">${t.direction==="IN"?"+":"-"}${fmtUsd(t.total)}</td>
         </tr>`).join("");
 
-    function buildTop10(direction) {
+    function buildTopN(direction, n) {
       const agg = {};
       for (const r of rows.filter(r=>r.direction===direction)) {
         if (!agg[r.counterparty]) agg[r.counterparty]={addr:r.counterparty,count:0,totalEth:0,totalUsd:0,tokens:new Set()};
@@ -346,9 +358,9 @@ async function runAudit() {
         agg[r.counterparty].totalUsd+=r.valueUsd;
         agg[r.counterparty].tokens.add(r.token);
       }
-      return Object.values(agg).sort((a,b)=>b.totalUsd-a.totalUsd).slice(0,10);
+      return Object.values(agg).sort((a,b)=>b.totalUsd-a.totalUsd).slice(0,n);
     }
-    function renderTop10(top, tableId, direction) {
+    function renderTopN(top, tableId, direction) {
       const sign = direction==="IN"?"+":"-";
       const cls  = direction==="IN"?"amount-in":"amount-out";
       const rowCls = direction==="IN"?"in-row":"out-row";
@@ -357,7 +369,7 @@ async function runAudit() {
           <td style="color:#8b949e;font-weight:700">${i+1}</td>
           <td class="addr">
             <a href="https://etherscan.io/address/${r.addr}" target="_blank">${shortAddr(r.addr)}</a>
-            <br><span style="font-size:0.68rem;color:#484f58">${r.addr}</span>
+            <br><span style="font-size:0.7rem;color:#484f58">${r.addr}</span>
           </td>
           <td>${fmtNum(r.count)}</td>
           <td class="${cls}">${sign}${fmtEth(r.totalEth)}</td>
@@ -365,8 +377,9 @@ async function runAudit() {
           <td>${[...r.tokens].map(t=>`<span class="token-pill">${t}</span>`).join("")}</td>
         </tr>`).join("");
     }
-    renderTop10(buildTop10("IN"), "inTable","IN");
-    renderTop10(buildTop10("OUT"),"outTable","OUT");
+    renderTopN(buildTopN("IN",20),  "inTable",  "IN");
+    renderTopN(buildTopN("OUT",20), "outTable", "OUT");
+
     document.getElementById("results").style.display = "block";
     clearStatus();
   } catch(e) {
@@ -391,7 +404,7 @@ function downloadCSV() {
   document.body.appendChild(a); a.click(); document.body.removeChild(a);
 }
 
-function downloadDOCX() {
+function downloadRTF() {
   const rows   = allTxData;
   const ethIn  = rows.filter(r=>r.direction==="IN" &&r.token==="ETH").reduce((s,r)=>s+r.valueEth,0);
   const ethOut = rows.filter(r=>r.direction==="OUT"&&r.token==="ETH").reduce((s,r)=>s+r.valueEth,0);
@@ -402,7 +415,7 @@ function downloadDOCX() {
   const firstDateStr = walletFirstDate ? walletFirstDate.toISOString().slice(0,10) : "N/A";
   const today = new Date().toISOString().slice(0,10);
 
-  function buildTop10(direction) {
+  function buildTopN(direction, n) {
     const agg = {};
     for (const r of rows.filter(r=>r.direction===direction)) {
       if (!agg[r.counterparty]) agg[r.counterparty]={addr:r.counterparty,count:0,totalEth:0,totalUsd:0};
@@ -410,28 +423,41 @@ function downloadDOCX() {
       agg[r.counterparty].totalEth+=r.valueEth;
       agg[r.counterparty].totalUsd+=r.valueUsd;
     }
-    return Object.values(agg).sort((a,b)=>b.totalUsd-a.totalUsd).slice(0,10);
+    return Object.values(agg).sort((a,b)=>b.totalUsd-a.totalUsd).slice(0,n);
   }
-  const inTop=buildTop10("IN"), outTop=buildTop10("OUT");
-  const colorTable = `{\\colortbl ;\\red255\\green255\\blue255;\\red31\\green111\\blue235;\\red198\\green239\\blue206;\\red255\\green199\\blue206;\\red0\\green0\\blue0;}`;
+  const inTop=buildTopN("IN",20), outTop=buildTopN("OUT",20);
 
+  // Color table: index 1=black, 2=white, 3=blue(header bg), 4=green row, 5=red row
+  const colorTable = `{\\colortbl ;\\red0\\green0\\blue0;\\red255\\green255\\blue255;\\red31\\green111\\blue235;\\red198\\green239\\blue206;\\red255\\green199\\blue206;}`;
+
+  function safe(s) { return String(s).replace(/[\\{}]/g,"").replace(/[^\x20-\x7E]/g,"?"); }
+
+  // Header row: blue bg, white bold text
   function hdrRow(cells) {
     const colW = Math.floor(11000/cells.length);
     return "\\trowd\\trgaph120\\trleft-120" +
       cells.map((_,i)=>`\\cellx${(i+1)*colW}`).join("") +
-      cells.map(c=>`\\intbl\\cb2\\cf1\\b ${c}\\b0\\cell`).join("") + "\\row\n";
+      cells.map(c=>`\\intbl\\cb3\\cf2\\b\\fs20 ${safe(c)}\\b0\\cell`).join("") +
+      "\\row\n";
   }
+
+  // Data row: black text on white or colored background
   function dataRow(cells, colorIdx) {
     const colW = Math.floor(11000/cells.length);
+    const bg = colorIdx ? `\\cb${colorIdx}` : "\\cb2";
     return "\\trowd\\trgaph120\\trleft-120" +
       cells.map((_,i)=>`\\cellx${(i+1)*colW}`).join("") +
-      cells.map(c=>`\\intbl${colorIdx?`\\cb${colorIdx}`:""} ${String(c).replace(/[\\{}]/g,"")}\\cell`).join("") + "\\row\n";
+      cells.map(c=>`\\intbl${bg}\\cf1\\fs20 ${safe(c)}\\cell`).join("") +
+      "\\row\n";
   }
 
   let body = "";
-  body += `{\\pard\\qc\\b\\fs36\\cf5 ZPower Ethereum Wallet Forensic Report\\b0\\par}\n`;
-  body += `{\\pard\\qc\\fs20\\cf5 Generated: ${today}\\par}\n{\\pard\\par}\n`;
-  body += `{\\pard\\b\\fs28\\cf5 1. Wallet Summary\\b0\\par}\n{\\pard\\par}\n`;
+  body += `{\\pard\\qc\\b\\fs36\\cf1 ZPower Ethereum Wallet Forensic Report\\b0\\par}\n`;
+  body += `{\\pard\\qc\\fs22\\cf1 Generated: ${today}\\par}\n`;
+  body += `{\\pard\\par}\n`;
+
+  body += `{\\pard\\b\\fs28\\cf1 1. Wallet Summary\\b0\\par}\n`;
+  body += `{\\pard\\par}\n`;
   body += hdrRow(["Metric","Value"]);
   for (const [m,v] of [
     ["Wallet Address", walletAddress],
@@ -440,24 +466,29 @@ function downloadDOCX() {
     ["ETH Price", `$${ethPrice.toLocaleString()}`],
     ["ETH Balance", `${walletBalanceEth.toFixed(6)} ETH = $${(walletBalanceEth*ethPrice).toFixed(2)}`],
     ["Total Transactions", rows.length.toLocaleString()],
-    ["Received IN", `+${ethIn.toFixed(4)} ETH | +$${usdIn.toFixed(2)} | ${inCount} txs`],
-    ["Sent OUT", `-${ethOut.toFixed(4)} ETH | -$${usdOut.toFixed(2)} | ${outCount} txs`],
+    ["Received (IN)", `+${ethIn.toFixed(4)} ETH | +$${usdIn.toFixed(2)} | ${inCount} txs`],
+    ["Sent (OUT)", `-${ethOut.toFixed(4)} ETH | -$${usdOut.toFixed(2)} | ${outCount} txs`],
     ["Net ETH Flow", `${(ethIn-ethOut).toFixed(4)} ETH`],
-  ]) body += dataRow([m,v], 0);
+  ]) body += dataRow([m,v], 2);
 
-  body += `{\\pard\\par}\n{\\pard\\b\\fs28\\cf5 2. Top 10 Incoming Wallets\\b0\\par}\n{\\pard\\par}\n`;
+  body += `{\\pard\\par}\n`;
+  body += `{\\pard\\b\\fs28\\cf1 2. Top 20 Incoming Wallets (Green = IN)\\b0\\par}\n`;
+  body += `{\\pard\\par}\n`;
   body += hdrRow(["#","Counterparty Address","Txs","Total ETH","Total USD"]);
   for (const [i,r] of inTop.entries())
-    body += dataRow([i+1,r.addr,r.count,`+${r.totalEth.toFixed(4)} ETH`,`+$${r.totalUsd.toFixed(2)}`], 3);
+    body += dataRow([i+1, r.addr, r.count, `+${r.totalEth.toFixed(4)} ETH`, `+$${r.totalUsd.toFixed(2)}`], 4);
 
-  body += `{\\pard\\par}\n{\\pard\\b\\fs28\\cf5 3. Top 10 Outgoing Wallets\\b0\\par}\n{\\pard\\par}\n`;
+  body += `{\\pard\\par}\n`;
+  body += `{\\pard\\b\\fs28\\cf1 3. Top 20 Outgoing Wallets (Red = OUT)\\b0\\par}\n`;
+  body += `{\\pard\\par}\n`;
   body += hdrRow(["#","Counterparty Address","Txs","Total ETH","Total USD"]);
   for (const [i,r] of outTop.entries())
-    body += dataRow([i+1,r.addr,r.count,`-${r.totalEth.toFixed(4)} ETH`,`-$${r.totalUsd.toFixed(2)}`], 4);
+    body += dataRow([i+1, r.addr, r.count, `-${r.totalEth.toFixed(4)} ETH`, `-$${r.totalUsd.toFixed(2)}`], 5);
 
-  body += `{\\pard\\par}\n{\\pard\\qc\\fs18\\cf5 ZPower WalletSummaryTool · reedhuish.github.io/WalletSummaryTool\\par}\n`;
+  body += `{\\pard\\par}\n`;
+  body += `{\\pard\\qc\\fs18\\cf1 ZPower WalletSummaryTool · reedhuish.github.io/WalletSummaryTool · Powered by Etherscan API\\par}\n`;
 
-  const rtf = `{\\rtf1\\ansi\\deff0\n${colorTable}\n${body}}`;
+  const rtf = `{\\rtf1\\ansi\\ansicpg1252\\deff0\n${colorTable}\n${body}}`;
   const blob = new Blob([rtf], {type:"application/rtf"});
   const a = document.createElement("a");
   a.href = URL.createObjectURL(blob);
