@@ -1,0 +1,642 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ZPower Wallet Forensics | WalletSummaryTool</title>
+<script src="https://cdn.jsdelivr.net/npm/docx@8.5.0/build/index.min.js"></script>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'Segoe UI', Arial, sans-serif;
+    background: #0d1117;
+    color: #e6edf3;
+    min-height: 100vh;
+    padding: 24px;
+  }
+  .container { max-width: 1100px; margin: 0 auto; }
+  header {
+    text-align: center;
+    margin-bottom: 32px;
+    padding: 28px;
+    background: linear-gradient(135deg, #161b22, #1f2937);
+    border-radius: 12px;
+    border: 1px solid #30363d;
+  }
+  header h1 { font-size: 2rem; color: #58a6ff; margin-bottom: 6px; }
+  header p { color: #8b949e; font-size: 0.95rem; }
+  .input-card {
+    background: #161b22;
+    border: 1px solid #30363d;
+    border-radius: 12px;
+    padding: 24px;
+    margin-bottom: 24px;
+  }
+  .input-card h2 { color: #58a6ff; font-size: 1.1rem; margin-bottom: 16px; }
+  .input-row { display: flex; gap: 12px; flex-wrap: wrap; margin-bottom: 12px; }
+  input[type="text"], input[type="password"] {
+    flex: 1;
+    min-width: 200px;
+    padding: 10px 14px;
+    background: #0d1117;
+    border: 1px solid #30363d;
+    border-radius: 8px;
+    color: #e6edf3;
+    font-size: 0.95rem;
+    outline: none;
+    transition: border-color 0.2s;
+  }
+  input:focus { border-color: #58a6ff; }
+  input::placeholder { color: #484f58; }
+  label { display: block; font-size: 0.8rem; color: #8b949e; margin-bottom: 4px; }
+  .btn {
+    padding: 10px 24px;
+    border: none;
+    border-radius: 8px;
+    font-size: 0.95rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: opacity 0.2s, transform 0.1s;
+  }
+  .btn:hover { opacity: 0.85; transform: translateY(-1px); }
+  .btn:active { transform: translateY(0); }
+  .btn-primary { background: #238636; color: #fff; }
+  .btn-blue { background: #1f6feb; color: #fff; }
+  .btn-orange { background: #d97706; color: #fff; }
+  .btn-gray { background: #30363d; color: #e6edf3; }
+  .btn:disabled { opacity: 0.4; cursor: not-allowed; }
+  .api-note { font-size: 0.78rem; color: #8b949e; margin-top: 6px; }
+  .api-note a { color: #58a6ff; }
+  #status-bar {
+    display: none;
+    background: #161b22;
+    border: 1px solid #30363d;
+    border-left: 4px solid #58a6ff;
+    border-radius: 8px;
+    padding: 14px 18px;
+    margin-bottom: 20px;
+    font-size: 0.9rem;
+    color: #8b949e;
+  }
+  #error-bar {
+    display: none;
+    background: #2d1b1b;
+    border: 1px solid #f85149;
+    border-left: 4px solid #f85149;
+    border-radius: 8px;
+    padding: 14px 18px;
+    margin-bottom: 20px;
+    color: #f85149;
+    font-size: 0.9rem;
+  }
+  #results { display: none; }
+  .summary-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 14px;
+    margin-bottom: 24px;
+  }
+  .stat-card {
+    background: #161b22;
+    border: 1px solid #30363d;
+    border-radius: 10px;
+    padding: 18px;
+  }
+  .stat-card .label { font-size: 0.75rem; color: #8b949e; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 6px; }
+  .stat-card .value { font-size: 1.25rem; font-weight: 700; color: #e6edf3; }
+  .stat-card .sub { font-size: 0.8rem; color: #8b949e; margin-top: 3px; }
+  .stat-card.green { border-left: 4px solid #2ea043; }
+  .stat-card.red { border-left: 4px solid #f85149; }
+  .stat-card.blue { border-left: 4px solid #58a6ff; }
+  .section {
+    background: #161b22;
+    border: 1px solid #30363d;
+    border-radius: 12px;
+    padding: 20px;
+    margin-bottom: 20px;
+  }
+  .section h3 { font-size: 1rem; margin-bottom: 14px; color: #e6edf3; }
+  .section h3 span { font-size: 0.8rem; color: #8b949e; font-weight: normal; margin-left: 8px; }
+  table { width: 100%; border-collapse: collapse; font-size: 0.85rem; }
+  th {
+    background: #21262d;
+    padding: 10px 12px;
+    text-align: left;
+    font-weight: 600;
+    color: #8b949e;
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    border-bottom: 1px solid #30363d;
+  }
+  td {
+    padding: 9px 12px;
+    border-bottom: 1px solid #21262d;
+    vertical-align: middle;
+  }
+  tr:last-child td { border-bottom: none; }
+  tr.in-row td { background: rgba(46, 160, 67, 0.08); }
+  tr.out-row td { background: rgba(248, 81, 73, 0.08); }
+  tr:hover td { background: rgba(255,255,255,0.04) !important; }
+  .badge {
+    display: inline-block;
+    padding: 2px 8px;
+    border-radius: 12px;
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.03em;
+  }
+  .badge-in { background: rgba(46,160,67,0.2); color: #56d364; }
+  .badge-out { background: rgba(248,81,73,0.2); color: #f85149; }
+  .amount-in { color: #56d364; font-weight: 600; }
+  .amount-out { color: #f85149; font-weight: 600; }
+  .addr { font-family: monospace; font-size: 0.78rem; color: #8b949e; }
+  .addr a { color: #58a6ff; text-decoration: none; }
+  .addr a:hover { text-decoration: underline; }
+  .export-bar {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    margin-bottom: 24px;
+  }
+  .spinner {
+    display: inline-block;
+    width: 14px; height: 14px;
+    border: 2px solid #30363d;
+    border-top-color: #58a6ff;
+    border-radius: 50%;
+    animation: spin 0.7s linear infinite;
+    vertical-align: middle;
+    margin-right: 6px;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+  .token-pill {
+    display: inline-block;
+    padding: 1px 7px;
+    border-radius: 10px;
+    font-size: 0.7rem;
+    font-weight: 700;
+    background: #21262d;
+    color: #8b949e;
+    margin-right: 3px;
+  }
+  footer {
+    text-align: center;
+    margin-top: 32px;
+    color: #484f58;
+    font-size: 0.78rem;
+  }
+</style>
+</head>
+<body>
+<div class="container">
+
+  <header>
+    <h1>⚡ ZPower Wallet Forensics</h1>
+    <p>Ethereum wallet deep audit · Powered by Etherscan API · Built for Reed Huish / ZPower</p>
+  </header>
+
+  <div class="input-card">
+    <h2>🔍 Enter Wallet Details</h2>
+    <div class="input-row">
+      <div style="flex:2; min-width:280px;">
+        <label>Ethereum Wallet Address</label>
+        <input type="text" id="address" placeholder="0x8764B0CA81768CAC32cd39E6997488Fa4142637c" />
+      </div>
+      <div style="flex:1; min-width:200px;">
+        <label>Etherscan API Key</label>
+        <input type="password" id="apikey" placeholder="Your free API key" />
+      </div>
+    </div>
+    <div style="display:flex; gap:10px; align-items:center; flex-wrap:wrap;">
+      <button class="btn btn-primary" onclick="runAudit()" id="runBtn">▶ Run Forensic Audit</button>
+      <button class="btn btn-gray" onclick="clearAll()">✕ Clear</button>
+    </div>
+    <div class="api-note">
+      Free API key at <a href="https://etherscan.io/apis" target="_blank">etherscan.io/apis</a> · 
+      No data is sent to any server — all calls go directly from your browser to Etherscan.
+    </div>
+  </div>
+
+  <div id="status-bar"></div>
+  <div id="error-bar"></div>
+
+  <div id="results">
+
+    <div class="export-bar">
+      <button class="btn btn-blue" onclick="downloadCSV()">⬇ Download CSV</button>
+      <button class="btn btn-orange" onclick="downloadDOCX()">⬇ Download DOCX Report</button>
+      <button class="btn btn-gray" onclick="window.print()">🖨 Print / Save PDF</button>
+    </div>
+
+    <div class="summary-grid" id="summaryGrid"></div>
+
+    <div class="section">
+      <h3>📊 Token Breakdown <span>(all tokens IN/OUT)</span></h3>
+      <table id="tokenTable">
+        <thead><tr><th>Token</th><th>Direction</th><th>Tx Count</th><th>Total Amount</th></tr></thead>
+        <tbody></tbody>
+      </table>
+    </div>
+
+    <div class="section">
+      <h3>🟢 Top 10 Incoming Wallets <span>(largest by USD value)</span></h3>
+      <table id="inTable">
+        <thead><tr><th>#</th><th>Counterparty Address</th><th>Txs</th><th>Total ETH</th><th>Total USD</th><th>Tokens</th></tr></thead>
+        <tbody></tbody>
+      </table>
+    </div>
+
+    <div class="section">
+      <h3>🔴 Top 10 Outgoing Wallets <span>(largest by USD value)</span></h3>
+      <table id="outTable">
+        <thead><tr><th>#</th><th>Counterparty Address</th><th>Txs</th><th>Total ETH</th><th>Total USD</th><th>Tokens</th></tr></thead>
+        <tbody></tbody>
+      </table>
+    </div>
+
+  </div>
+
+  <footer>ZPower WalletSummaryTool · reedhuish.github.io/WalletSummaryTool · All data sourced live from Etherscan API</footer>
+</div>
+
+<script>
+// ─── GLOBALS ────────────────────────────────────────────────────────────────
+let allTxData = [];
+let ethPrice = 0;
+let walletAddress = "";
+
+// ─── HELPERS ────────────────────────────────────────────────────────────────
+function status(msg) {
+  const el = document.getElementById("status-bar");
+  el.style.display = "block";
+  el.innerHTML = `<span class="spinner"></span>${msg}`;
+}
+function clearStatus() { document.getElementById("status-bar").style.display = "none"; }
+function showError(msg) {
+  const el = document.getElementById("error-bar");
+  el.style.display = "block";
+  el.textContent = "❌ " + msg;
+}
+function clearError() { document.getElementById("error-bar").style.display = "none"; }
+
+async function etherscan(params, apiKey) {
+  const base = "https://api.etherscan.io/v2/api?chainid=1";
+  const qs = Object.entries({...params, apikey: apiKey}).map(([k,v])=>`${k}=${encodeURIComponent(v)}`).join("&");
+  const r = await fetch(`${base}&${qs}`);
+  const data = await r.json();
+  if (data.status === "1" || data.message === "OK") return data.result;
+  if (data.result === "0" || data.result === "") return [];
+  throw new Error(data.result || data.message || "API error");
+}
+
+async function fetchAllPages(module, action, address, apiKey) {
+  let all = [];
+  for (let page = 1; page <= 50; page++) {
+    const batch = await etherscan({module, action, address,
+      startblock:0, endblock:99999999, sort:"asc", page, offset:1000}, apiKey);
+    if (!Array.isArray(batch) || batch.length === 0) break;
+    all = all.concat(batch);
+    if (batch.length < 1000) break;
+    await new Promise(r => setTimeout(r, 250));
+  }
+  return all;
+}
+
+function shortAddr(addr) {
+  return addr ? addr.slice(0,8) + "..." + addr.slice(-6) : "";
+}
+
+function fmtEth(n) { return n === 0 ? "—" : n.toFixed(4) + " ETH"; }
+function fmtUsd(n) { return n === 0 ? "—" : "$" + n.toLocaleString("en-US", {minimumFractionDigits:2, maximumFractionDigits:2}); }
+function fmtNum(n) { return n.toLocaleString(); }
+
+// ─── MAIN AUDIT ─────────────────────────────────────────────────────────────
+async function runAudit() {
+  clearError();
+  const address = document.getElementById("address").value.trim();
+  const apiKey  = document.getElementById("apikey").value.trim();
+
+  if (!address.startsWith("0x") || address.length !== 42) {
+    showError("Invalid Ethereum address. Must start with 0x and be 42 characters."); return;
+  }
+  if (!apiKey) {
+    showError("Please enter your Etherscan API key. Get a free one at etherscan.io/apis."); return;
+  }
+
+  walletAddress = address;
+  document.getElementById("results").style.display = "none";
+  document.getElementById("runBtn").disabled = true;
+
+  try {
+    // ETH Price
+    status("Fetching ETH price...");
+    const priceData = await etherscan({module:"stats", action:"ethprice"}, apiKey);
+    ethPrice = parseFloat(priceData.ethusd || 0);
+
+    // Balance
+    status("Fetching wallet balance...");
+    const balRaw = await etherscan({module:"account", action:"balance", address, tag:"latest"}, apiKey);
+    const balanceEth = typeof balRaw === "string" ? parseInt(balRaw) / 1e18 : 0;
+
+    // Normal TXs
+    status("Fetching normal transactions...");
+    const normalTxs = await fetchAllPages("account", "txlist", address, apiKey);
+
+    // ERC-20 Transfers
+    status("Fetching ERC-20 token transfers...");
+    const tokenTxs = await fetchAllPages("account", "tokentx", address, apiKey);
+
+    status("Processing data...");
+    const addrLower = address.toLowerCase();
+
+    // Process normal txs
+    const rows = [];
+    for (const tx of normalTxs) {
+      if (tx.isError === "1") continue;
+      const valEth = parseInt(tx.value || 0) / 1e18;
+      const ts = parseInt(tx.timeStamp || 0);
+      const fr = (tx.from || "").toLowerCase();
+      const to = (tx.to || "").toLowerCase();
+      const dir = to === addrLower ? "IN" : "OUT";
+      rows.push({
+        hash: tx.hash, timestamp: ts, direction: dir,
+        counterparty: dir === "IN" ? fr : to,
+        valueEth: valEth, valueUsd: valEth * ethPrice, token: "ETH",
+        date: ts ? new Date(ts*1000).toISOString().slice(0,10) : ""
+      });
+    }
+    // Process token txs
+    for (const tx of tokenTxs) {
+      const dec = parseInt(tx.tokenDecimal || 18);
+      const val = parseInt(tx.value || 0) / Math.pow(10, dec);
+      const ts = parseInt(tx.timeStamp || 0);
+      const fr = (tx.from || "").toLowerCase();
+      const to = (tx.to || "").toLowerCase();
+      const dir = to === addrLower ? "IN" : "OUT";
+      rows.push({
+        hash: tx.hash, timestamp: ts, direction: dir,
+        counterparty: dir === "IN" ? fr : to,
+        valueEth: 0, valueUsd: val, token: tx.tokenSymbol || "?",
+        date: ts ? new Date(ts*1000).toISOString().slice(0,10) : ""
+      });
+    }
+
+    allTxData = rows;
+
+    // Wallet age
+    const timestamps = rows.map(r => r.timestamp).filter(t => t > 0);
+    const firstTs = timestamps.length ? Math.min(...timestamps) : 0;
+    const firstDate = firstTs ? new Date(firstTs*1000) : null;
+    const ageDays = firstDate ? Math.floor((Date.now() - firstDate)/86400000) : 0;
+    const ageYears = Math.floor(ageDays/365);
+    const ageRem   = ageDays % 365;
+
+    // Aggregates
+    const inRows  = rows.filter(r => r.direction === "IN");
+    const outRows = rows.filter(r => r.direction === "OUT");
+    const ethIn   = rows.filter(r => r.direction==="IN"  && r.token==="ETH").reduce((s,r)=>s+r.valueEth,0);
+    const ethOut  = rows.filter(r => r.direction==="OUT" && r.token==="ETH").reduce((s,r)=>s+r.valueEth,0);
+    const usdIn   = inRows.reduce((s,r)=>s+r.valueUsd,0);
+    const usdOut  = outRows.reduce((s,r)=>s+r.valueUsd,0);
+
+    // ── Summary cards ──────────────────────────────────────────────────────
+    const grid = document.getElementById("summaryGrid");
+    grid.innerHTML = `
+      <div class="stat-card blue">
+        <div class="label">Wallet Address</div>
+        <div class="value" style="font-size:0.75rem;font-family:monospace;word-break:break-all">${address}</div>
+        <div class="sub"><a href="https://etherscan.io/address/${address}" target="_blank" style="color:#58a6ff">View on Etherscan ↗</a></div>
+      </div>
+      <div class="stat-card blue">
+        <div class="label">Wallet Age</div>
+        <div class="value">${ageYears}y ${ageRem}d</div>
+        <div class="sub">Since ${firstDate ? firstDate.toISOString().slice(0,10) : "N/A"}</div>
+      </div>
+      <div class="stat-card blue">
+        <div class="label">ETH Balance</div>
+        <div class="value">${balanceEth.toFixed(4)} ETH</div>
+        <div class="sub">${fmtUsd(balanceEth * ethPrice)} @ ${fmtUsd(ethPrice)}/ETH</div>
+      </div>
+      <div class="stat-card blue">
+        <div class="label">Total Transactions</div>
+        <div class="value">${fmtNum(rows.length)}</div>
+        <div class="sub">${fmtNum(normalTxs.length)} normal · ${fmtNum(tokenTxs.length)} token</div>
+      </div>
+      <div class="stat-card green">
+        <div class="label">Total Received (IN)</div>
+        <div class="value">+${fmtEth(ethIn)}</div>
+        <div class="sub">+${fmtUsd(usdIn)} · ${fmtNum(inRows.length)} txs</div>
+      </div>
+      <div class="stat-card red">
+        <div class="label">Total Sent (OUT)</div>
+        <div class="value">-${fmtEth(ethOut)}</div>
+        <div class="sub">-${fmtUsd(usdOut)} · ${fmtNum(outRows.length)} txs</div>
+      </div>
+    `;
+
+    // ── Token breakdown ────────────────────────────────────────────────────
+    const tokenMap = {};
+    for (const r of rows) {
+      const key = r.token + "|" + r.direction;
+      if (!tokenMap[key]) tokenMap[key] = {token:r.token, direction:r.direction, count:0, total:0};
+      tokenMap[key].count++;
+      tokenMap[key].total += r.valueUsd;
+    }
+    const tokenRows = Object.values(tokenMap).sort((a,b)=>b.total-a.total);
+    const tokenTbody = document.querySelector("#tokenTable tbody");
+    tokenTbody.innerHTML = tokenRows.map(t => `
+      <tr class="${t.direction==="IN"?"in-row":"out-row"}">
+        <td><span class="token-pill">${t.token}</span></td>
+        <td><span class="badge ${t.direction==="IN"?"badge-in":"badge-out"}">${t.direction}</span></td>
+        <td>${fmtNum(t.count)}</td>
+        <td class="${t.direction==="IN"?"amount-in":"amount-out"}">${t.direction==="IN"?"+":"-"}${fmtUsd(t.total)}</td>
+      </tr>`).join("");
+
+    // ── Top 10 IN / OUT ────────────────────────────────────────────────────
+    function buildTop10(direction) {
+      const sub = rows.filter(r => r.direction === direction);
+      const agg = {};
+      for (const r of sub) {
+        const k = r.counterparty;
+        if (!agg[k]) agg[k] = {addr:k, count:0, totalEth:0, totalUsd:0, tokens:new Set()};
+        agg[k].count++;
+        agg[k].totalEth += r.valueEth;
+        agg[k].totalUsd += r.valueUsd;
+        agg[k].tokens.add(r.token);
+      }
+      return Object.values(agg).sort((a,b)=>b.totalUsd-a.totalUsd).slice(0,10);
+    }
+
+    function renderTop10(top, tableId, direction) {
+      const sign = direction === "IN" ? "+" : "-";
+      const cls  = direction === "IN" ? "amount-in" : "amount-out";
+      const rowCls = direction === "IN" ? "in-row" : "out-row";
+      document.querySelector(`#${tableId} tbody`).innerHTML = top.map((r,i) => `
+        <tr class="${rowCls}">
+          <td style="color:#8b949e;font-weight:700">${i+1}</td>
+          <td class="addr">
+            <a href="https://etherscan.io/address/${r.addr}" target="_blank">${shortAddr(r.addr)}</a>
+            <br><span style="font-size:0.7rem;color:#484f58">${r.addr}</span>
+          </td>
+          <td>${fmtNum(r.count)}</td>
+          <td class="${cls}">${sign}${fmtEth(r.totalEth)}</td>
+          <td class="${cls}">${sign}${fmtUsd(r.totalUsd)}</td>
+          <td>${[...r.tokens].map(t=>`<span class="token-pill">${t}</span>`).join("")}</td>
+        </tr>`).join("");
+    }
+
+    renderTop10(buildTop10("IN"),  "inTable",  "IN");
+    renderTop10(buildTop10("OUT"), "outTable", "OUT");
+
+    document.getElementById("results").style.display = "block";
+    clearStatus();
+
+  } catch(e) {
+    clearStatus();
+    showError("Error: " + (e.message || e));
+  } finally {
+    document.getElementById("runBtn").disabled = false;
+  }
+}
+
+// ─── CSV DOWNLOAD ────────────────────────────────────────────────────────────
+function downloadCSV() {
+  const headers = ["hash","date","direction","counterparty","value_eth","value_usd","token"];
+  const lines = [headers.join(",")];
+  for (const r of allTxData) {
+    lines.push([
+      r.hash, r.date, r.direction, r.counterparty,
+      r.valueEth.toFixed(8), r.valueUsd.toFixed(2), r.token
+    ].map(v=>`"${v}"`).join(","));
+  }
+  const blob = new Blob([lines.join("\n")], {type:"text/csv"});
+  const a = document.createElement("a");
+  a.href = URL.createObjectURL(blob);
+  a.download = `wallet_${walletAddress.slice(0,8)}_${new Date().toISOString().slice(0,10)}.csv`;
+  a.click();
+}
+
+// ─── DOCX DOWNLOAD ──────────────────────────────────────────────────────────
+async function downloadDOCX() {
+  const { Document, Paragraph, TextRun, Table, TableRow, TableCell,
+          HeadingLevel, AlignmentType, WidthType, BorderStyle,
+          ShadingType, Packer } = docx;
+
+  const addrLower = walletAddress.toLowerCase();
+  const rows = allTxData;
+  const ethIn  = rows.filter(r=>r.direction==="IN"  && r.token==="ETH").reduce((s,r)=>s+r.valueEth,0);
+  const ethOut = rows.filter(r=>r.direction==="OUT" && r.token==="ETH").reduce((s,r)=>s+r.valueEth,0);
+  const usdIn  = rows.filter(r=>r.direction==="IN").reduce((s,r)=>s+r.valueUsd,0);
+  const usdOut = rows.filter(r=>r.direction==="OUT").reduce((s,r)=>s+r.valueUsd,0);
+  const tss    = rows.map(r=>r.timestamp).filter(t=>t>0);
+  const firstTs= tss.length ? Math.min(...tss) : 0;
+  const firstDate = firstTs ? new Date(firstTs*1000).toISOString().slice(0,10) : "N/A";
+  const ageDays= firstTs ? Math.floor((Date.now()-firstTs*1000)/86400000) : 0;
+
+  function hdrRow(cells) {
+    return new TableRow({
+      children: cells.map(c => new TableCell({
+        shading: { fill: "1F6FEB", type: ShadingType.CLEAR },
+        children: [new Paragraph({
+          children: [new TextRun({ text: c, bold: true, color: "FFFFFF", size: 18 })]
+        })]
+      }))
+    });
+  }
+  function dataRow(cells, color) {
+    return new TableRow({
+      children: cells.map(c => new TableCell({
+        shading: color ? { fill: color, type: ShadingType.CLEAR } : {},
+        children: [new Paragraph({
+          children: [new TextRun({ text: String(c), size: 18 })]
+        })]
+      }))
+    });
+  }
+
+  function buildTop10docx(direction) {
+    const sub = rows.filter(r=>r.direction===direction);
+    const agg = {};
+    for (const r of sub) {
+      if (!agg[r.counterparty]) agg[r.counterparty] = {addr:r.counterparty,count:0,totalEth:0,totalUsd:0};
+      agg[r.counterparty].count++;
+      agg[r.counterparty].totalEth += r.valueEth;
+      agg[r.counterparty].totalUsd += r.valueUsd;
+    }
+    return Object.values(agg).sort((a,b)=>b.totalUsd-a.totalUsd).slice(0,10);
+  }
+
+  const sign = d => d==="IN" ? "+" : "-";
+  const inColor  = "C6EFCe";
+  const outColor = "FFC7CE";
+
+  const inTop  = buildTop10docx("IN");
+  const outTop = buildTop10docx("OUT");
+
+  const doc2 = new Document({
+    sections: [{
+      properties: {},
+      children: [
+        new Paragraph({ text: "ZPower Ethereum Wallet Forensic Report", heading: HeadingLevel.HEADING_1, alignment: AlignmentType.CENTER }),
+        new Paragraph({ children: [new TextRun({ text: `Generated: ${new Date().toISOString().slice(0,10)}`, color: "666666", size: 18 })], alignment: AlignmentType.CENTER }),
+        new Paragraph({ text: "" }),
+
+        new Paragraph({ text: "1. Wallet Summary", heading: HeadingLevel.HEADING_2 }),
+        new Table({
+          width: { size: 100, type: WidthType.PERCENTAGE },
+          rows: [
+            hdrRow(["Metric", "Value"]),
+            dataRow(["Wallet Address", walletAddress]),
+            dataRow(["Etherscan Link", `https://etherscan.io/address/${walletAddress}`]),
+            dataRow(["Wallet Age", `${Math.floor(ageDays/365)}y ${ageDays%365}d (since ${firstDate})`]),
+            dataRow(["ETH Price", `$${ethPrice.toLocaleString()}`]),
+            dataRow(["Total Transactions", rows.length.toLocaleString()]),
+            dataRow(["Received (IN)", `${rows.filter(r=>r.direction==="IN").length} txs | +${ethIn.toFixed(4)} ETH | +$${usdIn.toFixed(2)}`], inColor),
+            dataRow(["Sent (OUT)", `${rows.filter(r=>r.direction==="OUT").length} txs | -${ethOut.toFixed(4)} ETH | -$${usdOut.toFixed(2)}`], outColor),
+            dataRow(["Net ETH Flow", `${(ethIn-ethOut).toFixed(4)} ETH`]),
+          ]
+        }),
+        new Paragraph({ text: "" }),
+
+        new Paragraph({ text: "2. Top 10 Incoming Wallets", heading: HeadingLevel.HEADING_2 }),
+        new Table({
+          width: { size: 100, type: WidthType.PERCENTAGE },
+          rows: [
+            hdrRow(["#","Counterparty Address","Txs","Total ETH","Total USD"]),
+            ...inTop.map((r,i) => dataRow([i+1, r.addr, r.count, `+${r.totalEth.toFixed(4)} ETH`, `+$${r.totalUsd.toFixed(2)}`], inColor))
+          ]
+        }),
+        new Paragraph({ text: "" }),
+
+        new Paragraph({ text: "3. Top 10 Outgoing Wallets", heading: HeadingLevel.HEADING_2 }),
+        new Table({
+          width: { size: 100, type: WidthType.PERCENTAGE },
+          rows: [
+            hdrRow(["#","Counterparty Address","Txs","Total ETH","Total USD"]),
+            ...outTop.map((r,i) => dataRow([i+1, r.addr, r.count, `-${r.totalEth.toFixed(4)} ETH`, `-$${r.totalUsd.toFixed(2)}`], outColor))
+          ]
+        }),
+        new Paragraph({ text: "" }),
+        new Paragraph({ children: [new TextRun({ text: "ZPower WalletSummaryTool · reedhuish.github.io/WalletSummaryTool · Powered by Etherscan API", color: "999999", size: 16 })], alignment: AlignmentType.CENTER }),
+      ]
+    }]
+  });
+
+  const buffer = await Packer.toBlob(doc2);
+  const a = document.createElement("a");
+  a.href = URL.createObjectURL(buffer);
+  a.download = `wallet_report_${walletAddress.slice(0,8)}_${new Date().toISOString().slice(0,10)}.docx`;
+  a.click();
+}
+
+function clearAll() {
+  document.getElementById("address").value = "";
+  document.getElementById("apikey").value = "";
+  document.getElementById("results").style.display = "none";
+  clearStatus(); clearError();
+  allTxData = [];
+}
+</script>
+</body>
+</html>
